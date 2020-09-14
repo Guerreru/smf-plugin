@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	ATTENTION: If you are trying to install this manually, you should try
+	the package manager.  If it will not work for you, please take a look
+	at the following for information on this format:
+		http://mods.simplemachines.org/docs/manual-install.php
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+    <id>bbscoin:BBSCoin</id>
+    <version>2.0.0</version>
+
+    <file name="$boarddir/index.php">
+        <operation>
+            <search position="before"><![CDATA[
+		'.xml' => array('News.php', 'ShowXmlFeed'),
+]]></search>
+            <add><![CDATA[
+		// Begin BBSCoin code
+		'bbscoin' => array('bbscoin/BBSCoin.php', 'BBSCoin'),
+		// End BBSCoin code
+]]></add>
+        </operation>
+    </file>
+
+	<file name="$languagedir/ManagePermissions.english.php">
+		<operation>
+			<search position="after"><![CDATA[?>]]></search>
+			<add><![CDATA[
+// Begin BBSCoin code
+$txt['permissiongroup_bbscoin'] = 'BBSCoin';
+$txt['permissiongroup_simple_bbscoin'] = 'BBSCoin';
+
+$txt['permissionname_bbscoin_main'] = 'Allow access to BBSCoin Exchange';
+// End BBSCoin code
+]]></add>
+		</operation>
+	</file>
+
+	<file name="$sourcedir/ManagePermissions.php">
+		<operation>
+			<search position="before"><![CDATA[
+		'profile_remote_avatar',
+		'profile_remove_own',
+]]></search>
+			<add><![CDATA[
+		// Begin BBScoin code
+		'bbscoin_main',
+		// End BBScoin code			
+]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[
+			'pm_read' => array(false, 'pm', 'use_pm_system'),]]></search>
+			<add><![CDATA[
+			// Begin BBSCoin code
+			'bbscoin_main' => array(false, 'bbscoin', 'bbscoin'),
+			// End BBSCoin code]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[
+	$context['non_guest_permissions'] = array(]]></search>
+			<add><![CDATA[
+	$context['non_guest_permissions'] = array(
+		// Begin BBSCoin code
+		'bbscoin_main',
+		// End BBSCoin code]]></add>
+		</operation>
+	</file>
+
+    <file name="$sourcedir/Admin.php">
+        <operation>
+            <search position="after"><![CDATA[
+	// Define all the menu structure - see Subs-Menu.php for details!
+]]></search>
+            <add><![CDATA[
+	// Begin BBSCoin code
+	loadLanguage('BBSCoin');
+	// End BBSCoin code
+]]></add>
+        </operation>
+        <operation>
+        	<search position="after"><![CDATA[
+		'maintenance' => array(
+			'title' => $txt['admin_maintenance'],]]></search>
+			<add><![CDATA[
+		// Begin BBSCoin code
+		'bbscoin' => array(
+			'title' => $txt['bbscoin_admin'],
+			'permission' => array('bbscoin_admin'),
+			'areas' => array(
+				'bbscoin_general' => array(
+					'label' => $txt['bbscoin_admin_setting'],
+					'file' => 'bbscoin/BBSCoinAdmin.php',
+					'function' => 'BBSCoinGeneral',
+				),
+			),
+		),
+		// End BBSCoin code
+]]></add>
+		</operation>
+    </file>
+
+	<file name="$languagedir/Modifications.english.php">
+		<operation>
+			<search position="after"><![CDATA[?>]]></search>
+			<add><![CDATA[
+// Begin BBSCoin code
+$txt['bbscoin_menu_button'] = 'BBSCoin Exchange';
+// End BBSCoin code
+]]></add>
+		</operation>
+	</file>
+
+    <file name="$sourcedir/Subs.php">
+        <operation>
+            <search position="after"><![CDATA[
+			'mlist' => array(
+]]></search>
+            <add><![CDATA[
+			// Begin BBSCoin code
+			// !!! Add subactions?
+			'bbscoin' => array(
+				'title' => $txt['bbscoin_menu_button'],
+				'href' => $scripturl . '?action=bbscoin',
+				'show' => true,
+			),
+			// End BBSCoin code
+]]></add>
+        </operation>
+    </file>
+</modification>
+
